@@ -87,31 +87,40 @@ mcphost -m ollama:qwen3.5:9b --config .mcphost.json
 ## Example LLM Prompts
 Once the server is connected, try these prompts to test the various functionalities:
 1. Data Ingestion & Scaling
-
-"I have a binary dataset of animals.
+```
+I have a binary dataset of animals.
 object,predator,mammal,flying
 lion,1,1,0
 shark,1,0,0
 pigeon,0,0,1
 bat,1,1,1
-Please upload this to the FCA server. Once it is loaded, prune the lattice with 0.0 minimum support and describe the top 3 most stable concepts you find."
+Please upload this to the FCA server. Once it is loaded, prune the lattice with 0.0 minimum support and describe the top 3 most stable concepts you find.
+```
 
 2. Logical Extraction
-
-"Based on the animal data currently loaded in the session, what are the strict logical implications? After that, calculate the probabilistic association rules with a minimum confidence of 0.5. Explain the difference between the hard and soft rules you found."
+```
+Based on the animal data currently loaded in the session, what are the strict logical implications? After that, calculate the probabilistic association rules with a minimum confidence of 0.5. Explain the difference between the hard and soft rules you found.
+```
 
 3. Redundancy & Navigation
-
-"I want to clean up this data. Are there any attribute reducts we can apply to simplify the lattice? Also, start at the 'Top' concept (ID 0) and navigate down one level to show me its immediate sub-categories."
+```
+I want to clean up this data. Are there any attribute reducts we can apply to simplify the lattice? Also, start at the 'Top' concept and navigate down one level to show me its immediate sub-categories.
+```
 
 4. The Advanced Numeric Test (Scaling & Snapshots)
-
-"Clear the current FCA session. I have new RPG character data:
+```
+Clear the current FCA session. I have new RPG character data:
 object,strength,speed
 warrior,80,40
 rogue,30,90
 mage,10,20
-Upload this data, but you must scale 'strength' into bins [0, 50, 100] and 'speed' into bins [0, 50, 100]. Once uploaded, save this state as a snapshot named 'V1'. Then, tell me what binary attributes were generated."
+Upload this data, but you must scale 'strength' into bins [0, 50, 100] and 'speed' into bins [0, 50, 100]. Once uploaded, save this state as a snapshot named 'V1'. Then, tell me what binary attributes were generated.
+```
+
+5. Showing the Lattice
+```
+Show the lattice. Print the absolute complete, raw, unedited string. Do NOT truncate it, do NOT summarize it, and do NOT use comments like '// Additional connections'. I need every single character of the output.
+```
 
 ## Core FCA Concepts for Users
 * Extent: The set of objects that belong to a concept.
