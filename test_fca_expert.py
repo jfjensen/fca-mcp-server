@@ -134,3 +134,20 @@ async def test_dot_generation():
     dot = unwrap(raw_dot)
     # Graphviz DOT often starts with comments or the word 'digraph'
     assert "digraph" in dot or "graph" in dot
+    
+@pytest.mark.asyncio
+async def test_mermaid_generation():
+    """Test that the Mermaid.js graph syntax is generated correctly."""
+    await mcp.call_tool("upload_from_csv", arguments={"csv_data": BINARY_CSV})
+    
+    # Call the new Mermaid tool (no arguments needed)
+    raw_mermaid = await mcp.call_tool("get_lattice_mermaid")
+    mermaid_code = unwrap(raw_mermaid)
+    
+    # Verify it returns standard Mermaid syntax
+    assert isinstance(mermaid_code, str)
+    assert "graph BT" in mermaid_code, "Mermaid code should start with the 'graph BT' directive"
+    assert "-->" in mermaid_code, "Mermaid code should contain edge connections (-->)"
+    
+    # Ensure it parsed at least a few concepts
+    assert "c0" in mermaid_code

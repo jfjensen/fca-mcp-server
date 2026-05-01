@@ -157,6 +157,27 @@ def snapshot_and_compare(name: str, compare_to: Optional[str] = None):
 def get_lattice_dot():
     """Returns Graphviz DOT source for visual rendering."""
     return _get_active_context().lattice.graphviz().source
+    
+@mcp.tool()
+def get_lattice_mermaid() -> str:
+    """Returns Mermaid.js graph code for native visual rendering in Markdown/Chat."""
+    ctx = _get_active_context()
+    
+    # "graph BT" means Bottom-to-Top, which is standard for FCA lattices
+    lines = ["graph BT"]
+    
+    for c in ctx.lattice:
+        # Create a clean label without quotes that would break Mermaid syntax
+        intent = ", ".join(c.intent) if c.intent else "Top"
+        
+        # Define the node
+        lines.append(f'    c{c.index}["[{c.index}] {intent}"]')
+        
+        # Draw edges to the upper neighbors (parents)
+        for parent in c.upper_neighbors:
+            lines.append(f"    c{c.index} --> c{parent.index}")
+            
+    return "\n".join(lines)
 
 if __name__ == "__main__":
     mcp.run()
