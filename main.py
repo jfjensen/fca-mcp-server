@@ -166,20 +166,17 @@ def get_lattice_mermaid() -> str:
     lines = ["graph BT"]
     
     for c in ctx.lattice:
-        # 1. Grab both Objects (extent) and Attributes (intent)
         extent_str = ", ".join(c.extent) if c.extent else "None"
         intent_str = ", ".join(c.intent) if c.intent else "None"
         
-        # 2. Build a clean label with HTML line breaks instead of commas 
-        # that stretch the box forever. We also swap any stray double quotes 
-        # for single quotes to completely prevent the \" escaping issue.
-        label = f"[{c.index}]<br/>Objs: {extent_str}<br/>Attrs: {intent_str}"
-        label = label.replace('"', "'")
+        # 1. Change [0] to Concept 0 so Mermaid doesn't get confused by nested brackets
+        # 2. Strip out any stray quotes entirely just to be bulletproof
+        label = f"Concept {c.index}<br/>Objs: {extent_str}<br/>Attrs: {intent_str}"
+        label = label.replace('"', '').replace("'", "")
         
-        # 3. Add the node to the graph
-        lines.append(f'    c{c.index}["{label}"]')
+        # 3. Create the node with NO quotes around the label!
+        lines.append(f"    c{c.index}[{label}]")
         
-        # 4. Draw edges to parents
         for parent in c.upper_neighbors:
             lines.append(f"    c{c.index} --> c{parent.index}")
             
