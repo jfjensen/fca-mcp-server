@@ -163,17 +163,23 @@ def get_lattice_mermaid() -> str:
     """Returns Mermaid.js graph code for native visual rendering in Markdown/Chat."""
     ctx = _get_active_context()
     
-    # "graph BT" means Bottom-to-Top, which is standard for FCA lattices
     lines = ["graph BT"]
     
     for c in ctx.lattice:
-        # Create a clean label without quotes that would break Mermaid syntax
-        intent = ", ".join(c.intent) if c.intent else "Top"
+        # 1. Grab both Objects (extent) and Attributes (intent)
+        extent_str = ", ".join(c.extent) if c.extent else "None"
+        intent_str = ", ".join(c.intent) if c.intent else "None"
         
-        # Define the node
-        lines.append(f'    c{c.index}["[{c.index}] {intent}"]')
+        # 2. Build a clean label with HTML line breaks instead of commas 
+        # that stretch the box forever. We also swap any stray double quotes 
+        # for single quotes to completely prevent the \" escaping issue.
+        label = f"[{c.index}]<br/>Objs: {extent_str}<br/>Attrs: {intent_str}"
+        label = label.replace('"', "'")
         
-        # Draw edges to the upper neighbors (parents)
+        # 3. Add the node to the graph
+        lines.append(f'    c{c.index}["{label}"]')
+        
+        # 4. Draw edges to parents
         for parent in c.upper_neighbors:
             lines.append(f"    c{c.index} --> c{parent.index}")
             
