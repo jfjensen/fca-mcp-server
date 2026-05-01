@@ -1,0 +1,5 @@
+startCommand:
+  type: stdio
+  command: uvx
+  args:
+    - fca-expert
