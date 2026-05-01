@@ -84,51 +84,10 @@ export OLLAMA_HOST=http://127.0.0.1:11434
 mcphost -m ollama:qwen3.5:9b --config .mcphost.json
 ```
 
-## Quick Installation when Using AI Desktop Apps
-
-**For Claude Desktop**
-Open `claude_desktop_config.json` and add:
-```JSON
-{
-  "mcpServers": {
-    "fca-expert": {
-      "command": "uvx",
-      "args": [
-        "git+https://github.com/yourusername/fca-mcp-server.git"
-      ]
-    }
-  }
-}
-```
-
-**For OpenCode App**
-OpenCode has its own configuration format. Add this in `opencode.jsonc`:
-```JSON
-"mcp": {
-  "fca-expert": {
-    "type": "local",
-    "command": ["uvx", "git+https://github.com/yourusername/fca-mcp-server.git"],
-    "enabled": true
-  }
-}
-```
-
-**For Cline / VS Code**
-Cline uses `cline_mcp_settings.json`. The syntax is identical to Claude Desktop:
-```JSON
-{
-  "mcpServers": {
-    "fca-expert": {
-      "command": "uvx",
-      "args": ["git+https://github.com/yourusername/fca-mcp-server.git"]
-    }
-  }
-}
-```
-
-##💡 Example LLM Prompts
+## Example LLM Prompts
 Once the server is connected, try these prompts to test the various functionalities:
 1. Data Ingestion & Scaling
+
 "I have a binary dataset of animals.
 object,predator,mammal,flying
 lion,1,1,0
@@ -136,11 +95,17 @@ shark,1,0,0
 pigeon,0,0,1
 bat,1,1,1
 Please upload this to the FCA server. Once it is loaded, prune the lattice with 0.0 minimum support and describe the top 3 most stable concepts you find."
+
 2. Logical Extraction
+
 "Based on the animal data currently loaded in the session, what are the strict logical implications? After that, calculate the probabilistic association rules with a minimum confidence of 0.5. Explain the difference between the hard and soft rules you found."
+
 3. Redundancy & Navigation
+
 "I want to clean up this data. Are there any attribute reducts we can apply to simplify the lattice? Also, start at the 'Top' concept (ID 0) and navigate down one level to show me its immediate sub-categories."
+
 4. The Advanced Numeric Test (Scaling & Snapshots)
+
 "Clear the current FCA session. I have new RPG character data:
 object,strength,speed
 warrior,80,40
@@ -148,14 +113,14 @@ rogue,30,90
 mage,10,20
 Upload this data, but you must scale 'strength' into bins [0, 50, 100] and 'speed' into bins [0, 50, 100]. Once uploaded, save this state as a snapshot named 'V1'. Then, tell me what binary attributes were generated."
 
-## 🧠 Core FCA Concepts for Users
+## Core FCA Concepts for Users
 * Extent: The set of objects that belong to a concept.
 * Intent: The set of attributes shared by all objects in that concept.
 * Stability: A metric (0-1) indicating how robust a concept is. High stability means the concept represents a significant pattern, not noise.
 * Implication: A strict rule ($A \implies B$) found in the data where every object having attribute A also possesses attribute B.
 * Reduct: The minimum set of attributes needed to represent the data without losing any logical structure.
 
-## 📂 Key Tools Included
+## Key Tools Included
 Tool                    | Description
 ------------------------|--------------------------------------------------------------
 `upload_from_csv`       | Ingests data with optional numeric/categorical scaling.
@@ -165,5 +130,5 @@ Tool                    | Description
 `snapshot_and_compare`  | Tracks how concepts change between two different data states.
 `get_lattice_dot`       | Generates a Hasse diagram for visualization.
 
-## 📄 License
+## License
 MIT
